@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧮 เครื่องมือคำนวณออนไลน์</h1>
+            <p>คำนวณ BMI, ดอกเบี้ย, ภาษี และเงินเดือนสุทธิ</p>
+        </div>
+        <div class="tab-container">
+            <button class="tab-button active" onclick="openTab(event,'bmi')">
+                💪 BMI Calculator
+            </button>
+            <button class="tab-button" onclick="openTab(event,'interest')">
+                💰 คำนวณดอกเบี้ย
+            </button>
+            <button class="tab-button" onclick="openTab(event,'tax')">
+                📊 คำนวณภาษี
+            </button>
+            <button class="tab-button" onclick="openTab(event,'salary')">
+                💼 เงินเดือนสุทธิ
+            </button>
+        </div>
+
+        <!-- BMI Calculator Tab -->
+        <div id="bmi" class="tab-content active">
+            <div class="calculator-grid">
+                <div class="input-section">
+                    <h3> ข้อมูลส่วนบุคคล</h3>
+                    <div class="form-group">
+                        <label for="weight">น้ำหนัก(กิดโลกรัม)</label>
+                        <input type="number" id="weight" placeholder="กรอกน้ำหนักของคุณ" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="height">ส่วนสูง(เซนติเมตร)</label>
+                        <input type="number" id="height" placeholder="กรอกส่วนสูงของคุณ" step="0.1">
+                    </div>
+                    <button class="btn" onclick="calculateBMI()">คำนวณBMi</button>
+                    <div class="result-section">
+                        <div class="result-label">ค่า BMI ของคุณ</div>
+                        <div class="result-value" id="bmi-result">-</div>
+                        <div class="bmi-category" id="bmi-category">
+                            กรุณาใส่ข้อมูลน้ำหนักและส่วนสูง
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interest Calculator Tab -->
+        <div id="interest" class="tab-content">
+            <div class="calculator-grid">
+                <div class="input-section">
+                    <h3>ข้อมูลการลงทุน</h3>
+                    <div class="form-group">
+                        <label for="principal">เงินต้น (บาท)</label>
+                        <input type="number" id="principal" placeholder="เช่น 100000">
+                    </div>
+                    <div class="form-group">
+                        <label for="rate">อัตราดอกเบี้ย (% ต่อปี)</label>
+                        <input type="number" id="rate" placeholder="เช่น 5" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="time">ระยะเวลา (ปี)</label>
+                        <input type="number" id="time" placeholder="เช่น 10">
+                    </div>
+                    <div class="form-group">
+                        <label for="compound">ประเภทดอกเบี้ย</label>
+                        <select id="compound">
+                            <option value="simple">ดอกเบี้ยธรรมดา</option>
+                            <option value="compound">ดอกเบี้ยทบต้น</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="calculateInterest()">คำนวณดอกเบี้ย</button>
+                </div>
+                <div class="result-section">
+                    <div class="result-label">เงินที่ได้รับทั้งหมด</div>
+                    <div class="result-value" id="interest-result">-</div>
+                    <div style="margin-top: 1rem;">
+                        <div>เงินต้น: <span id="principal-display">-</span> บาท</div>
+                        <div>ดอกเบี้ย: <span id="interest-earned">-</span> บาท</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tax Calculator Tab -->
+        <div id="tax" class="tab-content">
+            <div class="tax-settings">
+                <h4>⚙️ ตั้งค่าอัตราภาษี</h4>
+                <button class="btn btn-secondary" onclick="openTaxSettings()">แก้ไขอัตราภาษี</button>
+            </div>
+            <div class="calculator-grid">
+                <div class="input-section">
+                    <h3>ข้อมูลรายได้</h3>
+                    <div class="form-group">
+                        <label for="annual-income">รายได้ต่อปี (บาท)</label>
+                        <input type="number" id="annual-income" placeholder="เช่น 480000">
+                    </div>
+                    <div class="form-group">
+                        <label for="deduction">ค่าลดหย่อน (บาท)</label>
+                        <input type="number" id="deduction" placeholder="เช่น 60000" value="60000">
+                    </div>
+                    <button class="btn" onclick="calculateTax()">คำนวณภาษี</button>
+                </div>
+                <div class="result-section">
+                    <div class="result-label">ภาษีที่ต้องชำระ</div>
+                    <div class="result-value" id="tax-result">-</div>
+                    <div style="margin-top: 1rem;">
+                        <div>รายได้หลังหักค่าลดหย่อน: <span id="taxable-income">-</span> บาท</div>
+                        <div>รายได้สุทธิ: <span id="net-income">-</span> บาท</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Salary Calculator Tab -->
+        <div id="salary" class="tab-content">
+            <div class="calculator-grid">
+                <div class="input-section">
+                    <h3>ข้อมูลเงินเดือน</h3>
+                    <div class="form-group">
+                        <label for="gross-salary">เงินเดือนรวม (บาท/เดือน)</label>
+                        <input type="number" id="gross-salary" placeholder="เช่น 40000">
+                    </div>
+                    <div class="form-group">
+                        <label for="social-security">ประกันสังคม (%)</label>
+                        <input type="number" id="social-security" value="5" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="provident-fund">กองทุนสำรองเลี้ยงชีพ (%)</label>
+                        <input type="number" id="provident-fund" placeholder="เช่น 5" step="0.1">
+                    </div>
+                    <button class="btn" onclick="calculateNetSalary()">คำนวณเงินเดือนสุทธิ</button>
+                </div>
+                <div class="result-section">
+                    <div class="result-label">เงินเดือนสุทธิ (ต่อเดือน)</div>
+                    <div class="result-value" id="salary-result">-</div>
+                    <div style="margin-top: 1rem;">
+                        <div>เงินเดือนรวม: <span id="gross-display">-</span> บาท</div>
+                        <div>หักประกันสังคม: <span id="ss-deduction">-</span> บาท</div>
+                        <div>หักกองทุน: <span id="pf-deduction">-</span> บาท</div>
+                        <div>หักภาษี: <span id="tax-deduction">-</span> บาท</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Section -->
+        <div class="history-section">
+            <h3>📋 ประวัติการคำนวณล่าสุด</h3>
+            <button class="btn btn-danger" onclick="clearHistory()">ล้างประวัติ</button>
+            <div id="history-list">
+                <div class="history-item">
+                    <span>ยังไม่มีการคำนวณ</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tax Settings Modal -->
+        <div id="tax-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeTaxSettings()">&times;</span>
+                <h3>ตั้งค่าอัตราภาษีเงินได้</h3>
+                <div id="tax-brackets">
+                    <div class="tax-bracket">
+                        <input type="number" placeholder="รายได้เริ่มต้น" value="0" readonly>
+                        <input type="number" placeholder="รายได้สิ้นสุด" id="bracket-1-end" value="150000">
+                        <input type="number" placeholder="อัตราภาษี %" id="bracket-1-rate" value="0" step="0.1">
+                        <span>%</span>
+                    </div>
+                    <div class="tax-bracket">
+                        <input type="number" placeholder="รายได้เริ่มต้น" id="bracket-2-start" value="150000"
+                            readonly>
+                        <input type="number" placeholder="รายได้สิ้นสุด" id="bracket-2-end" value="300000">
+                        <input type="number" placeholder="อัตราภาษี %" id="bracket-2-rate" value="5" step="0.1">
+                        <span>%</span>
+                    </div>
+                    <div class="tax-bracket">
+                        <input type="number" placeholder="รายได้เริ่มต้น" id="bracket-3-start" value="300000"
+                            readonly>
+                        <input type="number" placeholder="รายได้สิ้นสุด" id="bracket-3-end" value="500000">
+                        <input type="number" placeholder="อัตราภาษี %" id="bracket-3-rate" value="10"
+                            step="0.1">
+                        <span>%</span>
+                    </div>
+                    <div class="tax-bracket">
+                        <input type="number" placeholder="รายได้เริ่มต้น" id="bracket-4-start" value="500000"
+                            readonly>
+                        <input type="number" placeholder="รายได้สิ้นสุด" id="bracket-4-end" value="750000">
+                        <input type="number" placeholder="อัตราภาษี %" id="bracket-4-rate" value="15"
+                            step="0.1">
+                        <span>%</span>
+                    </div>
+                    <div class="tax-bracket">
+                        <input type="number" placeholder="รายได้เริ่มต้น" id="bracket-5-start" value="750000"
+                            readonly>
+                        <input type="number" placeholder="รายได้สิ้นสุด" id="bracket-5-end" value="1000000">
+                        <input type="number" placeholder="อัตราภาษี %" id="bracket-5-rate" value="20"
+                            step="0.1">
+                        <span>%</span>
+                    </div>
+                    <div class="tax-bracket">
+                        <input type="number" placeholder="รายได้เริ่มต้น" id="bracket-6-start" value="1000000"
+                            readonly>
+                        <input type="text" placeholder="รายได้สิ้นสุด" value="ขึ้นไป" readonly>
+                        <input type="number" placeholder="อัตราภาษี %" id="bracket-6-rate" value="25"
+                            step="0.1">
+                        <span>%</span>
+                    </div>
+                </div>
+                <button class="btn" onclick="saveTaxSettings()">บันทึกการตั้งค่า</button>
+            </div>
+
+        </div>
+
+        <script src="scripts/main.js"></script>
+        <script src="scripts/bmi.js"></script>
+        <script src="scripts/interest.js"></script>
+        <script src="scripts/tax.js"></script>
+        <script src="scripts/salary.js"></script>
+</body>
+
+</html>
